@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gabriele Pizzileo — Portfolio</title>
+<meta name="description" content="Gabriele Pizzileo — IoT & Industry 4.0 student at ITS Academy Alto Adriatico, looking for an Erasmus+ traineeship (January–April 2027).">
+<meta name="theme-color" content="#0e131b">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* palette: opaque grey + opaque dark blue */
+    --bg: #0e131b;
+    --bg-2: #131a24;
+    --card: #161e2a;
+    --line: #243042;
+    --text: #d9dee5;
+    --muted: #8b95a3;
+    --accent: #8597ad;        /* muted blue-grey for small labels */
+    --blue: #2b3b52;          /* dark opaque blue (primary surfaces) */
+    --blue-hi: #354a66;
+    --radius: 14px;
+    --max: 1040px;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: #a9b7c9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1, h2, h3, h4 { font-family: "Space Grotesk", Inter, sans-serif; line-height: 1.2; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 20;
+    border-bottom: 1px solid transparent;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+  nav.scrolled { background: rgba(14, 19, 27, .88); backdrop-filter: blur(10px); border-color: var(--line); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  nav .logo { font-family: "Space Grotesk", sans-serif; font-weight: 700; color: var(--text); }
+  nav .logo:hover { text-decoration: none; }
+  nav ul { display: flex; gap: 22px; list-style: none; }
+  nav ul a { color: var(--muted); font-size: 14px; transition: color 150ms ease; }
+  nav ul a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 760px) { nav ul { display: none; } }
+
+  /* ---------- hero with the 3D orb ---------- */
+  .hero {
+    position: relative; min-height: 100vh; min-height: 100svh;
+    display: flex; align-items: center; overflow: hidden;
+    background: radial-gradient(900px 600px at 72% 45%, #172235 0%, var(--bg) 70%);
+  }
+  .hero canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+    opacity: 0; transition: opacity 1400ms var(--ease-out);
+  }
+  .hero canvas.ready { opacity: 1; }
+  .hero::after {           /* keeps the text readable over the orb */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(14,19,27,.85) 0%, rgba(14,19,27,.35) 45%, transparent 65%),
+                linear-gradient(0deg, var(--bg) 0%, transparent 18%);
+  }
+  @media (max-width: 899px) {
+    .hero::after { background: linear-gradient(0deg, var(--bg) 0%, rgba(14,19,27,.55) 45%, rgba(14,19,27,.35) 100%); }
+  }
+  .hero.orb-fallback {
+    background: var(--bg) url("images/hud-sphere.jpg") 85% 50% / cover no-repeat;
+  }
+  .hero .wrap { position: relative; z-index: 2; width: 100%; padding-top: 60px; }
+  .hero-text { max-width: 560px; }
+  .eyebrow {
+    font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+  .hero h1 { font-size: clamp(42px, 7vw, 70px); margin: 14px 0 10px; letter-spacing: -.01em; }
+  .hero .role { font-size: clamp(19px, 2.6vw, 24px); font-weight: 500; }
+  .hero p.lead { color: var(--muted); margin-top: 18px; font-size: 17px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 26px;
+    padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
+    background: rgba(19, 26, 36, .8); font-size: 14px;
+  }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #7f9a86; }
+
+  /* ---------- buttons ---------- */
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn {
+    display: inline-block; padding: 12px 22px; border-radius: 10px;
+    font-weight: 600; font-size: 15px; color: var(--text);
+    border: 1px solid var(--line); background: rgba(19, 26, 36, .6);
+    transition: transform 160ms var(--ease-out), background-color 150ms ease, border-color 150ms ease;
+  }
+  .btn:hover { text-decoration: none; }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary { background: var(--blue); border-color: var(--blue-hi); color: #e6eaf0; }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { border-color: #3a4a60; background: #1a2331; }
+    .btn.primary:hover { background: var(--blue-hi); border-color: #435a7a; }
+  }
+
+  /* ---------- sections ---------- */
+  section.block { padding: 84px 0; border-top: 1px solid var(--line); }
+  section.block h2 { font-size: clamp(28px, 4vw, 36px); margin-bottom: 8px; }
+  .section-sub { color: var(--muted); margin-bottom: 36px; max-width: 640px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .grid-3 { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .card { padding: 22px; } }
+
+  .about p { margin-bottom: 14px; max-width: 760px; font-size: 17px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .facts span {
+    font-size: 14px; color: var(--muted); padding: 6px 12px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2);
+  }
+
+  /* projects */
+  .project { margin-bottom: 28px; }
+  .project-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .project h3 { font-size: 26px; }
+  .meta { color: var(--muted); font-size: 14px; }
+  .tagline { color: var(--accent); font-weight: 500; margin: 4px 0 16px; }
+  .project p { margin-bottom: 12px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tags span {
+    font-size: 13px; padding: 4px 10px; border-radius: 6px;
+    background: rgba(133, 151, 173, .08); color: #aab5c4; border: 1px solid rgba(133, 151, 173, .2);
+  }
+  .note {
+    margin-top: 18px; padding: 14px 18px; border-left: 3px solid var(--blue-hi);
+    background: var(--bg-2); border-radius: 0 10px 10px 0; font-size: 15px;
+  }
+  .note strong { color: #b4c0cf; }
+
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 22px 0 6px; }
+  .flow .node {
+    padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg-2); font-size: 14px; text-align: center;
+  }
+  .flow .node small { display: block; color: var(--muted); font-size: 12px; }
+  .flow .arrow { color: var(--accent); font-weight: 600; }
+  @media (max-width: 620px) {
+    .flow { flex-direction: column; align-items: stretch; }
+    .flow .arrow { transform: rotate(90deg); text-align: center; }
+  }
+
+  .shot { border-radius: 12px; border: 1px solid var(--line); width: 100%; display: block; }
+  .cap { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .baba-top { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: center; }
+  @media (max-width: 820px) { .baba-top { grid-template-columns: 1fr; } }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 26px 0; }
+  .stat { text-align: center; padding: 16px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); }
+  .stat b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 30px; color: #b4c0cf; }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 820px) { .features { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+  .feature { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); }
+  .feature h4 { font-size: 15px; margin-bottom: 4px; }
+  .feature p { font-size: 14px; color: var(--muted); margin: 0; }
+  .principle {
+    margin-top: 24px; padding: 18px 22px; border-radius: 12px; font-size: 15px;
+    background: linear-gradient(135deg, rgba(53, 74, 102, .35), rgba(53, 74, 102, .08));
+    border: 1px solid var(--line);
+  }
+  h4.small-title { margin: 30px 0 12px; font-size: 18px; }
+  .learned { list-style: none; }
+  .learned li { padding-left: 22px; position: relative; margin-bottom: 8px; }
+  .learned li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+
+  /* timeline items */
+  .item { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: 0; }
+  .item .when { color: var(--muted); font-size: 14px; padding-top: 3px; }
+  .item h3 { font-size: 20px; }
+  .item .where { color: var(--accent); font-size: 15px; margin-bottom: 8px; }
+  .item ul { padding-left: 18px; }
+  .item li { margin-bottom: 4px; }
+  .item p { color: var(--muted); }
+  @media (max-width: 620px) { .item { grid-template-columns: 1fr; gap: 4px; } }
+
+  .skill-group h3 {
+    font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px;
+  }
+
+  .contact { text-align: center; }
+  .contact .section-sub { margin-left: auto; margin-right: auto; }
+  .contact .buttons { justify-content: center; }
+  footer { padding: 30px 0; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+
+  /* ---------- motion ---------- */
+  /* hero entrance: once, short non-uniform stagger */
+  .js .rise { opacity: 0; transform: translateY(8px); }
+  .js .loaded .rise {
+    opacity: 1; transform: none;
+    transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  /* sections: reveal once when they enter the screen */
+  .js .reveal { opacity: 0; transform: translateY(12px); }
+  .js .reveal.in {
+    opacity: 1; transform: none;
+    transition: opacity 380ms var(--ease-out), transform 380ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js .rise, .js .reveal { transform: none; }
+    .js .loaded .rise, .js .reveal.in { transition: opacity 300ms ease; transition-delay: 0ms; }
+    .btn:active { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Gabriele Pizzileo</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="orb" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-text">
+      <div class="eyebrow rise" style="--d:0ms">Portfolio</div>
+      <h1 class="rise" style="--d:60ms">Gabriele Pizzileo</h1>
+      <div class="role rise" style="--d:110ms">IoT &amp; Industry 4.0 student</div>
+      <p class="lead rise" style="--d:150ms">
+        I build connected systems with sensors, data and AI. I study at ITS Academy Alto Adriatico
+        and I want to work on IoT and digital transformation projects in an international team.
+      </p>
+      <div class="badge rise" style="--d:185ms"><span class="dot"></span>Looking for an Erasmus+ traineeship · January – April 2027</div>
+      <div class="buttons rise" style="--d:215ms">
+        <a class="btn primary" href="#contact">Contact me</a>
+        <a class="btn" href="#projects">See my projects</a>
+        <a class="btn" href="https://github.com/gabrielepizzileo7-eng" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="about" class="block about">
+  <div class="wrap reveal">
+    <h2>About me</h2>
+    <p>
+      I am a second-year student of <strong>Digital Transition Architect (IoT &amp; Industry 4.0)</strong>
+      at ITS Academy Alto Adriatico in Pordenone. I studied business and finance before, so I like
+      to see both sides of a project: the technology and the reason it is useful for a company.
+    </p>
+    <p>
+      I learn best by building things. I worked with SQL Server during my IT internship, I built an
+      IoT system with Arduino, MQTT and Node-RED, and I am building my own AI assistant at home.
+      I use AI tools every day, and I want to use them in real IoT and Industry 4.0 projects.
+    </p>
+    <div class="facts">
+      <span>Pordenone, Italy</span>
+      <span>ITS Academy Alto Adriatico (EQF 5)</span>
+      <span>Italian (native) · English (B1)</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Projects</h2>
+      <p class="section-sub">Two projects from 2026: one with my ITS team, one on my own.</p>
+    </div>
+
+    <article class="card project reveal">
+      <div class="project-head">
+        <h3>Smart Warehouse</h3>
+        <span class="meta">ITS team project · 2026</span>
+      </div>
+      <div class="tagline">IoT inventory monitoring for warehouse shelves</div>
+      <p>
+        A system that measures how full each shelf is, using ultrasonic sensors. The data goes in
+        real time to a live dashboard, and the system sends an alert when a shelf is almost empty.
+      </p>
+      <div class="flow" aria-label="Data flow of the Smart Warehouse system">
+        <div class="node">Ultrasonic sensors<small>shelf fill level</small></div>
+        <div class="arrow">→</div>
+        <div class="node">Arduino<small>C++ firmware, filtering</small></div>
+        <div class="arrow">→</div>
+        <div class="node">MQTT<small>messages</small></div>
+        <div class="arrow">→</div>
+        <div class="node">Node-RED<small>logic &amp; alerts</small></div>
+        <div class="arrow">→</div>
+        <div class="node">MySQL + dashboard<small>history &amp; live view</small></div>
+      </div>
+      <div class="note">
+        <strong>My role:</strong> hardware, C++ firmware, Node-RED integration and signal filtering
+        (to clean the noisy sensor readings). I also wrote the 23-page user manual.
+      </div>
+      <div class="tags">
+        <span>Arduino</span><span>C++</span><span>Ultrasonic sensors</span><span>MQTT</span>
+        <span>Node-RED</span><span>MySQL</span><span>Dashboard</span>
+      </div>
+    </article>
+
+    <article class="card project reveal">
+      <div class="project-head">
+        <h3>Baba — personal AI assistant</h3>
+        <span class="meta">Personal project · 2026 · in progress</span>
+      </div>
+      <div class="tagline">An AI assistant that runs on my Windows PC and acts for me</div>
+
+      <div class="baba-top">
+        <div>
+          <p>
+            Baba is a personal assistant connected to my email, calendar, files and notes. I talk
+            to it through a desktop app with an animated particle sphere — the one at the top of
+            this page — and it answers with its voice too.
+          </p>
+          <p>
+            It also has a second role: it is my <strong>finance and real-estate mentor</strong>.
+            It teaches me step by step, works with real market data and remembers my progress.
+          </p>
+        </div>
+        <figure>
+          <img class="shot" src="images/hud-sphere.jpg" alt="Baba's desktop app: a sphere made of thousands of particles on a dark background" loading="lazy">
+          <figcaption class="cap">The desktop app: about 5,000 particles that move while Baba speaks.</figcaption>
+        </figure>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>~47</b><span>tools</span></div>
+        <div class="stat"><b>11</b><span>areas</span></div>
+        <div class="stat"><b>24/7</b><span>starts with Windows</span></div>
+      </div>
+
+      <div class="features">
+        <div class="feature"><h4>Email &amp; calendar</h4><p>Reads and summarises Gmail, writes drafts, manages Google Calendar events.</p></div>
+        <div class="feature"><h4>Files &amp; documents</h4><p>Finds files from an approximate name, writes in Word and Excel, makes PowerPoint decks and PDFs.</p></div>
+        <div class="feature"><h4>Web research</h4><p>Searches the web, reads pages and PDFs, and gives numbered sources.</p></div>
+        <div class="feature"><h4>Memory</h4><p>Remembers facts between sessions and uses an Obsidian notes vault as its knowledge base.</p></div>
+        <div class="feature"><h4>Finance &amp; real estate</h4><p>A study path, delayed quotes, a watchlist, my own price alerts and rental analysis.</p></div>
+        <div class="feature"><h4>Proactive</h4><p>Morning briefing, inbox summary and alerts sent as push notifications to my phone.</p></div>
+      </div>
+
+      <h4 class="small-title">How it works</h4>
+      <div class="flow" aria-label="Architecture of Baba">
+        <div class="node">Desktop app · terminal · scheduler<small>text or voice</small></div>
+        <div class="arrow">→</div>
+        <div class="node">One "brain"<small>Python / FastAPI + Claude API</small></div>
+        <div class="arrow">→</div>
+        <div class="node">Tools<small>files, Office, web, finance</small></div>
+        <div class="arrow">+</div>
+        <div class="node">Gmail &amp; Calendar<small>via MCP</small></div>
+        <div class="arrow">+</div>
+        <div class="node">Memory<small>SQLite + Obsidian</small></div>
+      </div>
+      <p class="cap" style="margin-bottom:22px">
+        All channels send messages to one endpoint. The AI model decides which tools to use;
+        the tools are plain Python with strict limits. Repetitive work (prices, feeds, rules)
+        runs in Python for free, so the paid AI model works only when it is really needed.
+      </p>
+
+      <figure>
+        <img class="shot" src="images/presentation-demo.jpg" alt="Six slides of a presentation about index funds, generated by Baba" loading="lazy">
+        <figcaption class="cap">A PowerPoint deck that Baba made from one request.</figcaption>
+      </figure>
+
+      <div class="principle">
+        <strong>Its main rule:</strong> <em>"I calculate, explain and monitor. I never predict the market."</em>
+        Baba gives facts and reasons to help me decide — it never tells me what to buy or sell.
+      </div>
+
+      <div class="note">
+        <strong>How I built it:</strong> I designed Baba and directed every step: what it must do,
+        how the parts talk to each other, the safety rules, and the tests in real daily use.
+        Most of the code was written with <strong>Claude Code</strong>, an AI coding assistant,
+        following my instructions. I tested every feature and fixed the problems together with it.
+      </div>
+
+      <h4 class="small-title">What I learned</h4>
+      <ul class="learned">
+        <li>How to split a big project into small stages and finish one before starting the next.</li>
+        <li>How an AI agent works: the model, the tools, the limits and the costs.</li>
+        <li>How to connect external services (Gmail, Google Calendar) in a safe way.</li>
+        <li>How to keep private data private: the source code stays in a private repository.</li>
+      </ul>
+
+      <div class="tags">
+        <span>Python</span><span>FastAPI</span><span>Anthropic API</span><span>MCP</span>
+        <span>RAG memory</span><span>SQLite</span><span>Obsidian</span><span>Gmail API</span>
+        <span>Google Calendar</span><span>Text-to-speech</span><span>Three.js</span>
+      </div>
+      <div class="buttons">
+        <a class="btn" href="https://github.com/gabrielepizzileo7-eng/baba-assistant" target="_blank" rel="noopener">Read the project on GitHub →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="experience" class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Experience</h2>
+      <p class="section-sub">Technical work and the jobs that taught me teamwork.</p>
+    </div>
+    <div class="item reveal">
+      <div class="when">May – Jul 2026</div>
+      <div>
+        <h3>IT Intern</h3>
+        <div class="where">Tempestive S.p.A. · Pordenone</div>
+        <ul>
+          <li>Developed and debugged SQL Server functions for <em>Prodactivity</em>, an internal ticketing system on the LoCoMotiv low-code platform.</li>
+          <li>Implemented role-based visibility, so each user sees only the tickets of their own areas.</li>
+          <li>Configured WebParts (web pages) and supported a data migration between databases.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="item reveal">
+      <div class="when">2024 – 2026</div>
+      <div>
+        <h3>Other work</h3>
+        <div class="where">Hospitality, production, delivery</div>
+        <p>
+          Waiting staff at Hotel Oasi, Lignano Sabbiadoro (summer 2025 and 2026), production
+          operator at Legno Ver (2025), delivery rider at BonGustaio (2024). Customer service,
+          teamwork and reliability under pressure.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Skills</h2>
+      <p class="section-sub">Tools and technologies I have used in projects or at work.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card skill-group reveal" style="--d:0ms">
+        <h3>Programming</h3>
+        <div class="tags"><span>Python</span><span>JavaScript</span><span>C++ (Arduino)</span><span>C#</span><span>SQL / T-SQL</span><span>HTML</span><span>CSS</span></div>
+      </div>
+      <div class="card skill-group reveal" style="--d:50ms">
+        <h3>IoT &amp; automation</h3>
+        <div class="tags"><span>Arduino</span><span>MQTT</span><span>Node-RED</span><span>PLC fundamentals</span></div>
+      </div>
+      <div class="card skill-group reveal" style="--d:90ms">
+        <h3>Databases</h3>
+        <div class="tags"><span>SQL Server</span><span>MySQL / MariaDB</span><span>SQLite</span></div>
+      </div>
+      <div class="card skill-group reveal" style="--d:0ms">
+        <h3>AI</h3>
+        <div class="tags"><span>Claude</span><span>Claude Code</span><span>Anthropic API</span><span>AI agents &amp; tools</span></div>
+      </div>
+      <div class="card skill-group reveal" style="--d:50ms">
+        <h3>Tools</h3>
+        <div class="tags"><span>Linux</span><span>Apache</span><span>Visual Studio</span><span>VirtualBox</span><span>Cisco Packet Tracer</span><span>LoCoMotiv</span><span>Git &amp; GitHub</span></div>
+      </div>
+      <div class="card skill-group reveal" style="--d:90ms">
+        <h3>Languages</h3>
+        <div class="tags"><span>Italian — native</span><span>English — B1</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" class="block">
+  <div class="wrap">
+    <div class="reveal"><h2>Education</h2></div>
+    <div class="item reveal">
+      <div class="when">2025 – 2027</div>
+      <div>
+        <h3>Digital Transition Architect — Higher Technician (EQF 5)</h3>
+        <div class="where">ITS Academy Alto Adriatico · Pordenone</div>
+        <p>IoT protocols, edge and cloud, industrial automation, networking, databases, AI/ML, MES/ERP. In progress.</p>
+      </div>
+    </div>
+    <div class="item reveal">
+      <div class="when">2024</div>
+      <div>
+        <h3>University coursework in Banking and Finance</h3>
+        <div class="where">One year</div>
+      </div>
+    </div>
+    <div class="item reveal">
+      <div class="when">2023</div>
+      <div>
+        <h3>Diploma in Business, Finance &amp; Marketing</h3>
+        <div class="where">ISIS "Mattiussi-Pertini" · Pordenone</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="block contact">
+  <div class="wrap reveal">
+    <h2>Contact</h2>
+    <p class="section-sub">I am looking for an Erasmus+ traineeship from January to April 2027. Write to me!</p>
+    <div class="buttons">
+      <a class="btn primary" href="mailto:gabrielepizzileo7@gmail.com">gabrielepizzileo7@gmail.com</a>
+      <a class="btn" href="https://github.com/gabrielepizzileo7-eng" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>© 2026 Gabriele Pizzileo</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="orb-points.js"></script>
+<script>
+/* ---------- page motion: hero entrance, nav, section reveals ---------- */
+(function () {
+  const show = () => document.body.classList.add('loaded');
+  requestAnimationFrame(() => requestAnimationFrame(show));
+  setTimeout(show, 700);                       // safety net if frames are paused
+
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 40);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }  // once only
+    });
+  }, { rootMargin: '0px 0px -80px 0px', threshold: 0.08 });
+  items.forEach(el => io.observe(el));
+})();
+
+/* ---------- Baba's orb: the same ~5,000 points as the desktop app ---------- */
+(function () {
+  const hero = document.getElementById('top');
+  const canvas = document.getElementById('orb');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const fallback = () => { canvas.remove(); hero.classList.add('orb-fallback'); };
+
+  if (!window.THREE || !window.ORB_POINTS) { fallback(); return; }
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+  catch (e) { fallback(); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  camera.position.set(0, 0, 6.2);
+  const rig = new THREE.Group();
+  scene.add(rig);
+
+  // points: centred, scaled like the app (0.85)
+  const d = window.ORB_POINTS, n = d.count, S = 0.85;
+  let mx = 0, my = 0;
+  for (let i = 0; i < n; i++) { mx += d.pos[i * 3]; my += d.pos[i * 3 + 1]; }
+  mx /= n; my /= n;
+  const base = new Float32Array(n * 3), pos = new Float32Array(n * 3);
+  const dir = new Float32Array(n * 3), phase = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    base[i * 3] = (d.pos[i * 3] - mx) * S;
+    base[i * 3 + 1] = (d.pos[i * 3 + 1] - my) * S;
+    base[i * 3 + 2] = d.pos[i * 3 + 2] * S;
+    let a = Math.random() * 2 - 1, b = Math.random() * 2 - 1, c = Math.random() * 2 - 1;
+    const l = Math.hypot(a, b, c) || 1;
+    dir[i * 3] = a / l; dir[i * 3 + 1] = b / l; dir[i * 3 + 2] = c / l;
+    phase[i] = Math.random() * Math.PI * 2;
+  }
+  pos.set(base);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('aColor', new THREE.BufferAttribute(new Float32Array(d.col), 3));
+  geo.setAttribute('aSize', new THREE.BufferAttribute(new Float32Array(d.size), 1));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      uPixelRatio: { value: Math.min(devicePixelRatio, 2) },
+      uViewScale: { value: 1 },
+      uSizeMul: { value: 1.45 },
+      uTint: { value: new THREE.Color(0x8796ab) },   // muted grey-blue
+      uTintMix: { value: 0.65 },
+      uAlpha: { value: 1 },
+    },
+    vertexShader: `
+      attribute float aSize; attribute vec3 aColor;
+      uniform float uPixelRatio; uniform float uViewScale; uniform float uSizeMul;
+      varying vec3 vColor;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = aSize * uSizeMul * uPixelRatio * uViewScale * (6.2 / -mv.z);
+        vColor = aColor;
+      }`,
+    fragmentShader: `
+      uniform vec3 uTint; uniform float uTintMix; uniform float uAlpha;
+      varying vec3 vColor;
+      void main(){
+        float dd = length(gl_PointCoord - 0.5);
+        if (dd > 0.5) discard;
+        float a = pow(smoothstep(0.5, 0.0, dd), 1.5);
+        gl_FragColor = vec4(mix(vColor, uTint, uTintMix), a * 0.75 * uAlpha);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  const points = new THREE.Points(geo, mat);
+  rig.add(points);
+
+  // layout: orb on the right on wide screens, centred and dimmed behind the text on phones
+  let baseX = 0;
+  function layout() {
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    mat.uniforms.uViewScale.value = h / 960;
+    const visH = 2 * 6.2 * Math.tan(THREE.MathUtils.degToRad(25)), visW = visH * camera.aspect;
+    if (w >= 900) {
+      baseX = visW * 0.25; rig.scale.setScalar(1); mat.uniforms.uAlpha.value = 0.8;
+    } else {
+      baseX = 0; rig.scale.setScalar(Math.min(1, visW / 5.6)); mat.uniforms.uAlpha.value = 0.3;
+    }
+    rig.position.x = baseX;
+  }
+
+  // the particles near the cursor follow it; the orb itself stays in place
+  const FIELD = {
+    radius: 0.9,     // how far from the cursor particles feel it (orb radius is ~2.1)
+    pull: 0.5,       // how much they move toward the cursor
+    falloff: 1.4,    // softer edge of the area
+    follow: 0.14,    // reaction speed (per frame at 60fps)
+    back: 0.045,     // how slowly they drift home when the cursor leaves
+    max: 0.4,        // cap on any particle's movement
+    drag: 0.07,      // extra pull in the direction the mouse moves
+  };
+  const off = new Float32Array(n * 3);  const ndc = new THREE.Vector2(), ray = new THREE.Raycaster();
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const inv = new THREE.Matrix4(), hit = new THREE.Vector3();
+  let pointerIn = false, prev = null, cvx = 0, cvy = 0;
+  if (finePointer) {
+    hero.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
+      pointerIn = true;
+    }, { passive: true });
+    hero.addEventListener('pointerleave', () => { pointerIn = false; });
+  }
+  function cursorOnOrb() {                     // cursor position in the orb's own plane
+    if (!pointerIn) return null;
+    points.updateMatrixWorld();
+    ray.setFromCamera(ndc, camera);
+    inv.copy(points.matrixWorld).invert();
+    return ray.ray.clone().applyMatrix4(inv).intersectPlane(plane, hit);
+  }
+
+  // particles: slow "breathing" + each one floats on its own path + cursor field
+  function shapeParticles(t, dt) {
+    const k = 1 + 0.012 * Math.sin(t * 1.4);
+    const cur = cursorOnOrb();
+    if (cur && prev) {                         // smoothed cursor speed
+      cvx += ((cur.x - prev.x) / dt - cvx) * 0.25;
+      cvy += ((cur.y - prev.y) / dt - cvy) * 0.25;
+    } else { cvx *= 0.8; cvy *= 0.8; }
+    prev = cur ? { x: cur.x, y: cur.y } : null;
+    const R = FIELD.radius, R2 = R * R, M2 = FIELD.max * FIELD.max;
+    const aIn = 1 - Math.pow(1 - FIELD.follow, dt * 60);
+    const aOut = 1 - Math.pow(1 - FIELD.back, dt * 60);
+    for (let i = 0; i < n; i++) {
+      const o = i * 3, ph = phase[i];
+      const w = 0.075 * Math.sin(t * 0.55 + ph);
+      const x = base[o] * k + dir[o] * w;
+      const y = base[o + 1] * k + dir[o + 1] * w;
+      const a = 0.07 * Math.sin(t * 0.35 + ph * 1.7), ca = Math.cos(a), sa = Math.sin(a);
+      const px = x * ca - y * sa, py = x * sa + y * ca;
+      let ox = off[o], oy = off[o + 1];
+      const dx = cur ? cur.x - px : 0, dy = cur ? cur.y - py : 0, d2 = dx * dx + dy * dy;
+      if (cur && d2 < R2) {
+        const f = 1 - Math.sqrt(d2) / R;
+        const s = Math.pow(f * f * (3 - 2 * f), FIELD.falloff);
+        let gx = dx * FIELD.pull * s + cvx * FIELD.drag * s;
+        let gy = dy * FIELD.pull * s + cvy * FIELD.drag * s;
+        const g2 = gx * gx + gy * gy;
+        if (g2 > M2) { const m = FIELD.max / Math.sqrt(g2); gx *= m; gy *= m; }
+        ox += (gx - ox) * aIn; oy += (gy - oy) * aIn;
+      } else if (ox !== 0 || oy !== 0) {
+        ox -= ox * aOut; oy -= oy * aOut;
+        if (ox * ox + oy * oy < 1e-8) { ox = 0; oy = 0; }
+      }
+      off[o] = ox; off[o + 1] = oy;
+      pos[o] = px + ox;
+      pos[o + 1] = py + oy;
+      pos[o + 2] = base[o + 2] * k + dir[o + 2] * w;
+    }
+    geo.attributes.position.needsUpdate = true;
+  }
+
+  layout();
+  addEventListener('resize', () => { layout(); if (reduce) renderer.render(scene, camera); });
+
+  if (reduce) {                                   // still image, no motion
+    renderer.render(scene, camera);
+    canvas.classList.add('ready');
+    return;
+  }
+
+  let running = false, visible = true, last = 0, t = 0;
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+    last = now; t += dt;
+    points.rotation.z += 0.04 * dt;               // turns slowly like a wheel
+    shapeParticles(t, dt);
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  function update() {
+    const should = visible && !document.hidden;
+    if (should && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+    if (!should) running = false;
+  }
+  new IntersectionObserver((e) => { visible = e[0].isIntersecting; update(); }).observe(hero);
+  document.addEventListener('visibilitychange', update);
+  update();
+  requestAnimationFrame(() => canvas.classList.add('ready'));
+})();
+</script>
+</body>
+</html>
